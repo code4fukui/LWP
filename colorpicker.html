@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>colorpicker by BLE</title>
+</head><body>
+
+<h1 id=title>colorpicker by BLE</h1>
+<button id=btnc>connect BLE</button>
+<button id=btnd>disconnect BLE</button>
+<br>
+<input id=inp>
+<button id=btnpick>pick a color</button><br>
+<textarea id=res></textarea>
+
+<script type="module">
+import { LWP } from "./LWP.js";
+
+btnc.onclick = async () => {
+  const lwp = new LWP();
+  lwp.addDataListener(data => {
+    const rgb = data.ports[1].modes[1].value;
+    if (rgb) {
+      console.log(rgb);
+      document.body.style.backgroundColor = `rgb(${rgb.join(",")})`;
+      title.style.color = `rgb(${rgb.reduce((p, cur) => p + cur) < 127 * 3 ? "255,255,255" : "0,0,0"})`;
+      inp.value = "#" + rgb.map(c => c.toString(16)).map(c => c.length == 1 ? "0" + c : c).join("");
+    }
+  });
+  await lwp.connect({ autoCollect: false });
+  await lwp.startPortInput(1, 1);
+  btnpick.onclick = () => res.value += `"${inp.value}"\n`;
+  btnd.onclick = () => lwp.disconnect();
+};
+</script>
+
+<style>
+input, textarea, button {
+  margin-top: 1em;
+}
+</style>
+
+</body></html>
