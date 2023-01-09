@@ -2,7 +2,7 @@
 </head><title>LWP debugger</title>
 <body>
 <h1>LWP debugger</h1>
-<button id=btn>BLE</button><br>
+<button id=btn>Connect via Bluetooth(BLE)</button><br>
 
 portnum1: <input id=portnum value=0>
 <button id=btnsend>send</button><input id=num>
@@ -405,7 +405,7 @@ btn.onclick = async () => {
 
   // auto collect
   const collectAll = async () => {
-    await sleep(1000);
+    await sleep(2000);
     for (const portId in data.ports) {
       await ch.writeValueWithResponse(reqb.createPortInformationRequest(portId, 1));
     }
