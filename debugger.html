@@ -43,7 +43,6 @@ import { CSV } from "https://js.sabae.cc/CSV.js";
 // https://googlechrome.github.io/samples/web-bluetooth/notifications.html
 
 btn.onclick = async () => {
-  const data = {};
   const showData = () => {
     tadata.value = JSON.stringify(data, null, 2);
     tbl.innerHTML = "";
@@ -87,6 +86,7 @@ btn.onclick = async () => {
     }
   };
 
+  const data = {};
   const getPort = (portId) => {
     if (!data.ports) {
       data.ports = {};
@@ -137,7 +137,7 @@ btn.onclick = async () => {
       console.log('Service', key, valueDataView);
     });
 
-    data.name = event.device.name;
+    data.name = event.device.name.trim();
     //data.id = sid;
     data.id = event.device.id;
     data.rssi = event.rssi;
@@ -145,7 +145,7 @@ btn.onclick = async () => {
     data.uuids = event.uuids;
     showData();
   });
-  await device.watchAdvertisements();
+  //await device.watchAdvertisements();
 
   const server = await device.gatt.connect()
   console.log("server", server);
@@ -216,7 +216,7 @@ btn.onclick = async () => {
       const prop = v[3];
       const op = v[4];
       if (prop == 1) {
-        data.name = buf2s(5, datalen - 5);
+        data.name = buf2s(5, datalen - 5).trim();
       } else if (prop == 2) {
         data.hubbtn = v[5];
       } else if (prop == 3) {
@@ -253,7 +253,6 @@ btn.onclick = async () => {
     } else if (mestype == 4) {
       const portId = v[3];
       const port = getPort(portId);
-      console.log(portId, port)
       const comtype = v[4];
       if (comtype == 0) { // disconnect
         console.log("disconnected", portId);
@@ -266,6 +265,10 @@ btn.onclick = async () => {
         console.log("connected", portId, port.devid);
         return;
       }
+    } else if (mestype == 2) { // Hub Action
+      const actiontype = v[3];
+      console.log("Hub Action", actiontype);
+      return;
     } else if (mestype == 5) { // RSSi
       const rssi = (new Int8Array(event.target.value.buffer))[3];
       console.log("RSSi", rssi);
@@ -288,8 +291,6 @@ btn.onclick = async () => {
           mode.output = !!(outputmode & (1 << i));
         }
         //console.log({ output, input, logicalcombi, logicalsync, cntmode, inputmode, outputmode });
-
-
         return;
       }
     } else if (mestype == 0x44) { // 0x44 - response of motor port request https://lego.github.io/lego-ble-wireless-protocol-docs/index.html#port-mode-information
@@ -340,7 +341,12 @@ btn.onclick = async () => {
         mode.value = { x, y, z };
         //console.log("port value", portId, x, y, z);
         return;
+      } else if (datalen == 7) { // uint8 x 3
+        mode.value = [v[4], v[5], v[6]];
+        return;
+      } else if (datalen == 20) { // 16byte
       }
+      console.log("datalen", datalen);
     } else if (mestype == 0x47) {
       const portId = v[3];
       const port = getPort(portId);

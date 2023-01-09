@@ -17,13 +17,19 @@ const types = {
   0x0026:	"External Motor with Tacho",
   0x0027:	"Internal Motor with Tacho",
   0x0028:	"Internal Tilt",
-  // add
+  // Techinic Hub
   0x002e: "External Motor with Technic",
   0x0039: "Internal Accelerometer",
   0x003a: "Internal Rotation Sensor",
   0x003b: "Internal Angular Rate Sensor",
   0x0036: "Internal Gesture Sensor",
   0x003c: "Internal Temperature",
+  // LEGO Mario
+  0x0047: "Accelerometer, Gesture",
+  0x0049: "Color Barcode, RGB Color",
+  0x004a: "Pants", // 6bit digital input
+  0x0046: "Events, Debug, and something",
+  0x0055: "Events", // input & output support
 };
 
 export const getDevID = (id) => {
