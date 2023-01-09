@@ -1,10 +1,11 @@
 # LWP
 
-- library for LWP(Lego Wireless Protocol) in JavaScript & WebBluetooth
+- library of LWP (Lego Wireless Protocol) in JavaScript & WebBluetooth
 
 ## demo
 
 - [LWP debugger](https://code4fukui.github.io/LWP/debugger.html)
+- [colorpicker by BLE](https://code4fukui.github.io/LWP/colorpicker.html)
 
 ## reference
 
