@@ -5,11 +5,11 @@
 <button id=btn>Connect via Bluetooth(BLE)</button><br>
 
 portnum1: <input id=portnum value=0>
-<button id=btnsend>send</button><input id=num>
+<button id=btnsend>send</button><input id=num value=0>
 <input type=range min=-100 max=100 value=0 id=numr style="width:90vw;"><br>
 
 portnum2: <input id=portnum2 value=1>
-<button id=btnsend2>send</button><input id=num2>
+<button id=btnsend2>send</button><input id=num2 value=0>
 <input type=range min=-100 max=100 value=0 id=numr2 style="width:90vw;"><br>
 
 <!--
@@ -92,20 +92,25 @@ btn.onclick = async () => {
   btnsend.onclick = () => {
     writePower(num.value);
   };
+  numr.onchange = () => writePower(numr.value);
   //
+  const writeGotoAbsolutePosition = (n) => {
+    // -15: center, -30
+    lwp.write(reqb.createGotoAbsolutePosition(portnum2.value, n, 50, 50));
+  };
+  btnsend2.onclick = () => {
+    writeGotoAbsolutePosition(num2.value);
+  };
+  numr2.onchange = () => writeGotoAbsolutePosition(numr2.value);
+  //
+  btnsend3.onclick = () => {
+    lwp.write(reqb.createSetColor(50, colr.value));
+  };
+  // hub
   for (let i = 1; i <= 0xf; i++) {
     await lwp.write(reqb.createHubProperty(i));
   }
   //
-
-  numr.onchange = () => writePower(numr.value);
-  btnsend2.onclick = () => {
-    // -15: center, -30
-    lwp.write(reqb.createGotoAbsolutePosition(portnum2.value, num2.value, 50, 50));
-  };
-  btnsend3.onclick = () => {
-    lwp.write(reqb.createSetColor(50, colr.value));
-  };
   /*
   btnsend3_2.onclick = () => {
     lwp.write(reqb.createSetRGB(50, rgb1.value, rgb2.value, rgb3.value));
@@ -121,10 +126,8 @@ btn.onclick = async () => {
   */
   portinp3.onchange = () => {
     const portId = portinp1.value;
-    const nmode = portinp2.value;
-    const port = getPort(portId);
-    port.currentmode = nmode;
-    lwp.write(reqb.createPortInputFormatSetup(portId, nmode, portinp3.checked ? 1 : 0));
+    const mode = portinp2.value;
+    lwp.startPortInput(portId, mode, portinp3.checked ? 1 : 0);
   };
   btnsend6.onclick = () => {
     const type = 1; // off
