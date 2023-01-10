@@ -335,7 +335,7 @@ export class LWP {
   async startPortInput(portId, nmode, start = true) {
     const port = this.getPort(portId);
     port.currentmode = nmode;
-    await this.write(reqb.createPortInputFormatSetup(portId, nmode, true));
+    await this.write(reqb.createPortInputFormatSetup(portId, nmode, start));
   }
   async stopPortInput(portId, nmode) {
     await this.startPortInput(portId, nmode, false);
