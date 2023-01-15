@@ -30,6 +30,12 @@ const types = {
   0x004a: "Pants", // 6bit digital input
   0x0046: "Events, Debug, and something",
   0x0055: "Events", // input & output support
+  // SPIKE Prime
+  0x0030: "Medium Angular Motor",
+  0x0031: "Large Angular Motor",
+  0x003d: "Color Sensor",
+  0x003e: "Distance Sensor",
+  0x003f: "Force Sensor",
 };
 
 export const getDevID = (id) => {

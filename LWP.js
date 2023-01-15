@@ -271,6 +271,9 @@ export class LWP {
           mode.value = n2i(v[4] | (v[5] << 8));
           //console.log("port value", portId, n);
           return;
+        } else if (datalen == 7) { // uint8 x 3
+          mode.value = [v[4], v[5], v[6]];
+          return;
         } else if (datalen == 8) {
           mode.value = v[4] | (v[5] << 8) | (v[6] << 16) | (v[7] << 24);
           //console.log("port value", portId, n, "or float");
@@ -282,9 +285,16 @@ export class LWP {
           mode.value = { x, y, z };
           //console.log("port value", portId, x, y, z);
           return;
-        } else if (datalen == 7) { // uint8 x 3
-          mode.value = [v[4], v[5], v[6]];
+        } else if (datalen == 10) { // SPIKE Distance Sensor
+        } else if (datalen == 12) { // uint8 x 4 by color sensor mode: 	RGB I
+          const x = n2i(v[4] | (v[5] << 8));
+          const y = n2i(v[6] | (v[7] << 8));
+          const z = n2i(v[8] | (v[9] << 8));
+          const a = n2i(v[10] | (v[11] << 8));
+          mode.value = { x, y, z, a };
           return;
+        } else if (datalen == 18) { // 14byte
+          // color sensor debug
         } else if (datalen == 20) { // 16byte
         }
         console.log("datalen", datalen);
@@ -318,12 +328,13 @@ export class LWP {
           await this.write(reqb.createPortModeInformationRequest(portId, i, 0)); // name
           await this.write(reqb.createPortModeInformationRequest(portId, i, 1)); // min/max
           await this.write(reqb.createPortModeInformationRequest(portId, i, 4)); // symbol
-        }      
+        }
       }
+      await sleep(this.data.ports.length * 100);
     };
     const autoCollect = options.autoCollect ?? true;
     if (autoCollect) {
-      collectAll();
+      await collectAll();
     }
   }
   disconnect() {
