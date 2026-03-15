@@ -1,6 +1,6 @@
 # LWP
 
-LEGO Wireless Protocol のJavaScript/WebBluetoothライブラリです。
+LEGO Wireless Protocol のJavaScript/WebBluetooth ライブラリです。
 
 ## デモ
 

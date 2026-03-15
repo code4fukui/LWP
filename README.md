@@ -1,5 +1,7 @@
 # LWP
 
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+
 A library of the LEGO Wireless Protocol (LWP) in JavaScript and WebBluetooth.
 
 ## Demo
