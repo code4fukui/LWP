@@ -23,4 +23,4 @@ The library can be used to interact with LEGO Bluetooth devices that support the
 
 ## License
 
-MIT License
+MIT License — see [LICENSE](LICENSE).
